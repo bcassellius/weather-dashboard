@@ -12,8 +12,7 @@ This is a weather website that will allow the user to search for destination wea
 ## Dashboard url
 https://bcassellius.github.io/weather-dashboard/
 
-## Server-Side APIs Used
-- weather
-- asdf
+## Server-Side API Used
+https://openweathermap.org/api/one-call-api
 
 ### Created by Bri
