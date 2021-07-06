@@ -40,33 +40,31 @@ function getCityData(city){
         })
         .then(data =>{
             console.log(data)
+            const saveCity = function() {
+                localStorage.setItem(cityName.value, JSON.stringify(data))
+            }
+            saveCity()
         })
     })
-   
 }
+
+// const loadCity = function(){
+//     city = JSON.parse(localStorage.getItem(cityName.value));
+//     // if (!city){
+//     //     city = {
+//     //         // what would I load if there's nothing?
+//     //     }
+//     // }
+// }
+// // loadCity()
+
+// // var displayWeather = function(weather, searchTerm) {
+// //     console.log(weather);
+// //     console.log(searchTerm)
+// // }
 
 userFormEl.addEventListener("submit", formSubmitHandler)
 
-// submit.addEventListener('click', function(){
-//     var city = document.getElementById('input').value
-//     .trim()
-//     console.log (city)
-// })
-
-
-
-
-// var saveCity = function() {
-//     localStorage.setItem("city", JSON.stringify(city))
-// }
-// var loadCity = function(){
-//     city = JSON.parse(localStorage.getItem("city"));
-//     if (!city){
-//         city = {
-//             // what would I load if there's nothing?
-//         }
-//     }
-// }
 
 // getCityData("Dallas")
 
