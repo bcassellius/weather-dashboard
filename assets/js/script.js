@@ -21,7 +21,7 @@ var formSubmitHandler = function(event) {
 
 function getCityData(city){
     // get the data for the city's name
-    fetch(`https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=6796d6e231f36d13c2f70ab9e10e8126`)
+    fetch(`https://api.openweathermap.org/data/2.5/weather?q=${city}&units=imperial&appid=6796d6e231f36d13c2f70ab9e10e8126`)
     .then(response =>{
         return response.json()
     })
@@ -34,11 +34,37 @@ function getCityData(city){
         var icon = document.getElementById("icon")
         icon.setAttribute("src", `http://openweathermap.org/img/wn/${weathercode}@2x.png` )
         // get the data for the city by using the city's latitude and longitude
-        fetch(`https://api.openweathermap.org/data/2.5/onecall?lat=${lat}&lon=${lon}&exclude=minutely,hourly,alerts&appid=6796d6e231f36d13c2f70ab9e10e8126`)
+        fetch(`https://api.openweathermap.org/data/2.5/onecall?lat=${lat}&lon=${lon}&units=imperial&exclude=minutely,hourly,alerts&appid=6796d6e231f36d13c2f70ab9e10e8126`)
         .then(response =>{
             return response.json()
         })
         .then(data =>{
+            // Create a new JavaScript Date object based on the timestamp
+            let unix_timestamp = data.current.dt
+            var date = new Date(unix_timestamp * 1000);
+            console.log(date)
+            var weathercode = data.current.weather[0].icon
+            var icon = document.getElementById("icon")
+            icon.setAttribute("src", `http://openweathermap.org/img/wn/${weathercode}@2x.png` )
+            document.querySelector("#inputCity").innerHTML = "" + city + date + weathercode;
+            document.querySelector("#inputTemp").innerHTML = "Temperature: " + data.current.temp + "&#8457";
+            document.querySelector("#inputWind").innerHTML = "Wind Speed: " + data.current.wind_speed + "MPH";
+            document.querySelector("#inputHumidity").innerHTML = "Humidity: " + data.current.humidity + "%";
+            document.querySelector("#inputUvi").innerHTML = "UV Index: " + data.current.uvi;
+
+            
+
+            // // document.querySelector(".icon").innerHTML = icon.setAttribute("src", `http://openweathermap.org/img/wn/${weathercode}@2x.png` )
+            // document.querySelector(".temp").innerHTML = "Temp: " + data.current.temp + "&#8457";
+            // document.querySelector(".wind").innerHTML = "Wind Speed: " + data.current.wind_speed + "MPH";
+            // document.querySelector(".humidity").innerHTML = "Humidity: " + data.current.humidity + "%";
+            // // Name
+            // // Date
+            // // temp
+            // // humidity
+            // // wind speed
+            // // uv index
+           
             console.log(data)
             const saveCity = function() {
                 localStorage.setItem(cityName.value, JSON.stringify(data))
@@ -75,8 +101,11 @@ userFormEl.addEventListener("submit", formSubmitHandler)
 
 
 // addEventListener
+// to display 5 day forcast
 
-// for ( i = 0; i < 6; i++)
+// for ( i = 0; i < 6; i++){
+    
+
  
 
 
@@ -93,10 +122,3 @@ userFormEl.addEventListener("submit", formSubmitHandler)
 // WHEN I click on a city in the search history
 // THEN I am again presented with current and future conditions for that city
 
-
-// Name
-// Date
-// temp
-// humidity
-// wind speed
-// uv index
