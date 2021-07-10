@@ -43,39 +43,54 @@ function getCityData(city){
             let unix_timestamp = data.current.dt
             var date = new Date(unix_timestamp * 1000);
             console.log(date)
-            var weathercode = data.current.weather[0].icon
-            var icon = document.getElementById("icon")
-            icon.setAttribute("src", `http://openweathermap.org/img/wn/${weathercode}@2x.png` )
-            document.querySelector("#inputCity").innerHTML = "" + city + date + weathercode;
+            var currentDate = Intl.DateTimeFormat("en-US").format(date)
+            console.log(Intl.DateTimeFormat("en-US").format(date))
+            
+            document.querySelector("#inputCity").innerHTML = "" + city + " ( " + currentDate +" ) ";
             document.querySelector("#inputTemp").innerHTML = "Temperature: " + data.current.temp + "&#8457";
             document.querySelector("#inputWind").innerHTML = "Wind Speed: " + data.current.wind_speed + "MPH";
             document.querySelector("#inputHumidity").innerHTML = "Humidity: " + data.current.humidity + "%";
             document.querySelector("#inputUvi").innerHTML = "UV Index: " + data.current.uvi;
-
             
-
-            // // document.querySelector(".icon").innerHTML = icon.setAttribute("src", `http://openweathermap.org/img/wn/${weathercode}@2x.png` )
-            // document.querySelector(".temp").innerHTML = "Temp: " + data.current.temp + "&#8457";
-            // document.querySelector(".wind").innerHTML = "Wind Speed: " + data.current.wind_speed + "MPH";
-            // document.querySelector(".humidity").innerHTML = "Humidity: " + data.current.humidity + "%";
-            // // Name
-            // // Date
-            // // temp
-            // // humidity
-            // // wind speed
-            // // uv index
-           
-            console.log(data)
             const saveCity = function() {
-                localStorage.setItem(cityName.value, JSON.stringify(data))
+                localStorage.setItem(cityName.value, JSON.stringify(arr))
             }
-            saveCity()
+            
+            const loadCity = function(){
+                city = JSON.parse(localStorage.getItem(cityName.value));
+                console.log(city)
+            }
+           
+            for (var i = 0; i < 6; i++){
+                let stamp = data.daily[i].dt
+                const when = new Date(stamp * 1000)
+                const forcastdate = Intl.DateTimeFormat("en-US").format(when)
+                let d = document.querySelectorAll(".date").innerHTML = forcastdate
+                console.log(forcastdate)
+                let p = document.querySelectorAll(".icon").innerHTML = data.daily[i].weather[0].icon;
+                console.log(data.daily[i].weather[0].icon)
+                let t = document.querySelectorAll(".temp").innerHTML = "Temp. " + data.daily[i].temp.day + "&#8457";
+                console.log(data.daily[i].temp.day)
+                let w = document.querySelectorAll(".wind").innerHTML = "Wind: " + data.daily[i].wind_speed + "MPH";
+                console.log(data.daily[i].wind_speed)
+                let h = document.querySelectorAll(".humidity").innerHTML = "Humidity: " + data.daily[i].humidity + "%";
+                console.log(data.daily[i].humidity)
+                var arr = []
+                arr.push(d, p, t, w, h)
+                console.log(arr)
+                saveCity()
+                loadCity()
+            }
+
+
+
+           
+            // console.log(data)
         })
     })
 }
 
-// const loadCity = function(){
-//     city = JSON.parse(localStorage.getItem(cityName.value));
+
 //     // if (!city){
 //     //     city = {
 //     //         // what would I load if there's nothing?
