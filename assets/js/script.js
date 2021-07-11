@@ -39,6 +39,8 @@ function getCityData(city){
             return response.json()
         })
         .then(data =>{
+            takesOneCallAndRenders5Day(data)
+            
             // Create a new JavaScript Date object based on the timestamp
             let unix_timestamp = data.current.dt
             var date = new Date(unix_timestamp * 1000);
@@ -46,66 +48,65 @@ function getCityData(city){
             var currentDate = Intl.DateTimeFormat("en-US").format(date)
             console.log(Intl.DateTimeFormat("en-US").format(date))
             
+            // Create Current Weather Display
             document.querySelector("#inputCity").innerHTML = "" + city + " ( " + currentDate +" ) ";
             document.querySelector("#inputTemp").innerHTML = "Temperature: " + data.current.temp + "&#8457";
             document.querySelector("#inputWind").innerHTML = "Wind Speed: " + data.current.wind_speed + "MPH";
             document.querySelector("#inputHumidity").innerHTML = "Humidity: " + data.current.humidity + "%";
             document.querySelector("#inputUvi").innerHTML = "UV Index: " + data.current.uvi;
             
-            const saveCity = function() {
-                localStorage.setItem(cityName.value, JSON.stringify(arr))
-            }
-            
-            const loadCity = function(){
-                city = JSON.parse(localStorage.getItem(cityName.value));
-                console.log(city)
-            }
-           
-            for (var i = 0; i < 6; i++){
-                let stamp = data.daily[i].dt
-                const when = new Date(stamp * 1000)
-                const forcastdate = Intl.DateTimeFormat("en-US").format(when)
-                let d = document.querySelectorAll(".date").innerHTML = forcastdate
-                console.log(forcastdate)
-                let p = document.querySelectorAll(".icon").innerHTML = data.daily[i].weather[0].icon;
-                console.log(data.daily[i].weather[0].icon)
-                let t = document.querySelectorAll(".temp").innerHTML = "Temp. " + data.daily[i].temp.day + "&#8457";
-                console.log(data.daily[i].temp.day)
-                let w = document.querySelectorAll(".wind").innerHTML = "Wind: " + data.daily[i].wind_speed + "MPH";
-                console.log(data.daily[i].wind_speed)
-                let h = document.querySelectorAll(".humidity").innerHTML = "Humidity: " + data.daily[i].humidity + "%";
-                console.log(data.daily[i].humidity)
-                var arr = []
-                arr.push(d, p, t, w, h)
-                console.log(arr)
-                saveCity()
-                loadCity()
-            }
-
-
-
-           
-            // console.log(data)
         })
     })
 }
+/**
+ * key to localStorage should be something like pastSearches
+ * if we parse the localStorage.pastSearches bit we should get
+ * ["chicago", "paris"]
+ * 
+ * when we add to localstorage
+ * first get all thats in there (parse localstoarge to get array)
+ * array.push(newCity)
+ * 
+ * overwrite localstorage with the new array of cities
+ */
 
+function takesOneCallAndRenders5Day(data) {
+    // empty 5-day forcast cards
+    $('.forecast-container').empty()
+    // loop data to create 1 card and duplicate for additional days
+    for(let i = 0; i < 5; i++) {
+        renderSingleForecast(data.daily[i])
+    }
+}
+function renderSingleForecast(singleDayOfData) {
+    let stamp = singleDayOfData.dt
+    const when = new Date(stamp * 1000)
+    const forcastdate = Intl.DateTimeFormat("en-US").format(when)
+    const look = singleDayOfData.weather[0].icon
+     const temp = singleDayOfData.temp.day
+    const wind = singleDayOfData.wind_speed
+    const humidity = singleDayOfData.humidity
 
-//     // if (!city){
-//     //     city = {
-//     //         // what would I load if there's nothing?
-//     //     }
-//     // }
-// }
-// // loadCity()
-
-// // var displayWeather = function(weather, searchTerm) {
-// //     console.log(weather);
-// //     console.log(searchTerm)
-// // }
+    const card = `<div class="column col s12 m6 l2">
+    <div class= "card">
+        <div>
+            <ul id="day1" class="list-group list-group-flush">
+                <h5 class="list-group-item date">${forcastdate}</h5>
+                <a class="list-group-item icon" src="" alt="">${look}</a>
+                <li class="list-group-item temp">Temp: ${temp}&#8457</li>
+                <li class="list-group-item wind">Wind: ${wind} MPH</li>
+                <li class="list-group-item humidity">Humidity: ${humidity}%</li>
+            </ul>
+        </div>  
+    </div>
+</div>`;
+    $('.forecast-container').append(card)
+}
 
 userFormEl.addEventListener("submit", formSubmitHandler)
 
+// addEventListener to display 5 day forcast
+// load1.addEventListener("submit", loadForcast)
 
 // getCityData("Dallas")
 
@@ -115,8 +116,6 @@ userFormEl.addEventListener("submit", formSubmitHandler)
 // 6796d6e231f36d13c2f70ab9e10e8126
 
 
-// addEventListener
-// to display 5 day forcast
 
 // for ( i = 0; i < 6; i++){
     
@@ -137,3 +136,61 @@ userFormEl.addEventListener("submit", formSubmitHandler)
 // WHEN I click on a city in the search history
 // THEN I am again presented with current and future conditions for that city
 
+
+
+
+
+
+
+
+
+
+
+// // Create 5-day Forcast Display
+// for (let i = 0; i < 6; i++){
+//     let stamp = data.daily[i].dt
+//     const when = new Date(stamp * 1000)
+//     const forcastdate = Intl.DateTimeFormat("en-US").format(when)
+//     let d = document.querySelectorAll(".date").innerHTML = forcastdate
+//     console.log(forcastdate)
+//     let p = document.querySelectorAll(".icon").innerHTML = data.daily[i].weather[0].icon;
+//     console.log(data.daily[i].weather[0].icon)
+//     let t = document.querySelectorAll(".temp").innerHTML = "Temp. " + data.daily[i].temp.day + "&#8457";
+//     console.log(data.daily[i].temp.day)
+//     let w = document.querySelectorAll(".wind").innerHTML = "Wind: " + data.daily[i].wind_speed + "MPH";
+//     console.log(data.daily[i].wind_speed)
+//     let h = document.querySelectorAll(".humidity").innerHTML = "Humidity: " + data.daily[i].humidity + "%";
+//     console.log(data.daily[i].humidity)
+    
+//     // Make an array to save 5-day forcast data in localStorage
+//     var arr = []
+//     arr.push(d, p, t, w, h)
+//     console.log(arr)
+
+//     const saveforcast= function (){
+//         // this is where we are setting the localstorage name to the cityname searched + i
+//         localStorage.setItem(cityName.value + [i], JSON.stringify(arr))
+//     }
+//     loadforcast = function (){
+//         JSON.parse(localStorage.getItem(cityName.value + [i]));
+//     }
+
+//     console.log(forcast)
+    
+//     saveforcast()   
+// }
+
+
+
+
+// // console.log(data)
+
+
+
+
+
+
+
+    // // our data should hopefully be an array of objects
+    // console.log('our new render function called!')
+    // console.log(data.daily)
