@@ -1,5 +1,4 @@
 const submit = document.getElementById("submit")
-// const input = document.getElementById("input")
 const userFormEl = document.querySelector("#user-form")
 const cityName = document.querySelector("#cityName")
 var search = []
@@ -57,27 +56,39 @@ function getCityData(city){
             document.querySelector("#inputUvi").innerHTML = "UV Index: " + data.current.uvi;
             
             // retrieve the list of cities from storage, add to it, save/overwrite with the new list of cities
-            function save(){
-                var pastSearches = JSON.parse(localStorage.getItem("searches"));
-                if (!pastSearches) search = [];
-                // add a city because there was a new search done
-                const entrySearch = cityName.value.trim();
-                localStorage.setItem("entry", JSON.stringify(entrySearch));
-                // Save all entries to localStorage
-                search.push(entrySearch);
-                localStorage.setItem("searches", JSON.stringify(search));
-            }
-            save()
+            save(city)
+            loadSavedSearches()
             
         })
     })
 }
 
-function load(){
-    JSON.parse(localStorage.getItem("searches"))
-    // for loop to run the buttons through the city names
-    // addEventListner to the buttons to recall data
+// save search to localStorage
+function save(city){
+    var pastSearches = JSON.parse(localStorage.getItem("searches")) || []
+    // If there's not any past searches that inclued this city, add it in.
+    if (!pastSearches.includes(city)) {
+        pastSearches.push(city)       
+    }
+    localStorage.setItem("searches", JSON.stringify(pastSearches));
 }
+
+// get searches from localStorage
+function loadSavedSearches(){
+    var searches = JSON.parse(localStorage.getItem("searches")) || []
+    console.log(searches)
+    // empty the buttons before creating new ones
+    $(".past-search-container").empty()
+    // iterate through searches to put each one on it's own button
+    if (searches.length > 0) {
+        for (var i = 0; i < searches.length; i++){
+            var viewed= $('<button>').attr('class', "btn btn-secondary btn-past-searches").text(searches[i])
+            $(".past-search-container").append(viewed)    
+        }
+    }
+}
+
+loadSavedSearches();
 
 function takesOneCallAndRenders5Day(data) {
     // empty 5-day forcast cards
@@ -87,32 +98,44 @@ function takesOneCallAndRenders5Day(data) {
         renderSingleForecast(data.daily[i])
     }
 }
+
+// Create a card of 1 day's data for today's forcast
 function renderSingleForecast(singleDayOfData) {
     let stamp = singleDayOfData.dt
     const when = new Date(stamp * 1000)
     const forcastdate = Intl.DateTimeFormat("en-US").format(when)
     const look = singleDayOfData.weather[0].icon
-     const temp = singleDayOfData.temp.day
+    const temp = singleDayOfData.temp.day
     const wind = singleDayOfData.wind_speed
     const humidity = singleDayOfData.humidity
 
+    // create cards for each of the 5-day forcast weather
     const card = `<div class="column col s12 m6 l2">
     <div class= "card">
         <div>
-            <ul id="day1" class="list-group list-group-flush">
+            <ul class="list-group list-group-flush">
                 <h5 class="list-group-item date">${forcastdate}</h5>
-                <a class="list-group-item icon" src="" alt="">${look}</a>
+                <img class="weather-icon" src="http://openweathermap.org/img/wn/${look}@2x.png" alt="">
                 <li class="list-group-item temp">Temp: ${temp}&#8457</li>
                 <li class="list-group-item wind">Wind: ${wind} MPH</li>
                 <li class="list-group-item humidity">Humidity: ${humidity}%</li>
             </ul>
         </div>  
     </div>
-</div>`;
+    </div>`;
     $('.forecast-container').append(card)
 }
 
 userFormEl.addEventListener("submit", formSubmitHandler)
+
+// Click on Previous Searched buttons
+$(document).on('click', '.btn-past-searches', function(e) {
+    e.preventDefault();
+    var cityToSearch = this.textContent
+    console.log(cityToSearch);
+    getCityData(cityToSearch)
+})
+
 
 // 6796d6e231f36d13c2f70ab9e10e8126
 
