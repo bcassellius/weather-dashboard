@@ -2,6 +2,7 @@ const submit = document.getElementById("submit")
 // const input = document.getElementById("input")
 const userFormEl = document.querySelector("#user-form")
 const cityName = document.querySelector("#cityName")
+var search = []
 console.log(userFormEl)
 console.log(cityName)
 
@@ -55,20 +56,28 @@ function getCityData(city){
             document.querySelector("#inputHumidity").innerHTML = "Humidity: " + data.current.humidity + "%";
             document.querySelector("#inputUvi").innerHTML = "UV Index: " + data.current.uvi;
             
+            // retrieve the list of cities from storage, add to it, save/overwrite with the new list of cities
+            function save(){
+                var pastSearches = JSON.parse(localStorage.getItem("searches"));
+                if (!pastSearches) search = [];
+                // add a city because there was a new search done
+                const entrySearch = cityName.value.trim();
+                localStorage.setItem("entry", JSON.stringify(entrySearch));
+                // Save all entries to localStorage
+                search.push(entrySearch);
+                localStorage.setItem("searches", JSON.stringify(search));
+            }
+            save()
+            
         })
     })
 }
-/**
- * key to localStorage should be something like pastSearches
- * if we parse the localStorage.pastSearches bit we should get
- * ["chicago", "paris"]
- * 
- * when we add to localstorage
- * first get all thats in there (parse localstoarge to get array)
- * array.push(newCity)
- * 
- * overwrite localstorage with the new array of cities
- */
+
+function load(){
+    JSON.parse(localStorage.getItem("searches"))
+    // for loop to run the buttons through the city names
+    // addEventListner to the buttons to recall data
+}
 
 function takesOneCallAndRenders5Day(data) {
     // empty 5-day forcast cards
@@ -105,24 +114,7 @@ function renderSingleForecast(singleDayOfData) {
 
 userFormEl.addEventListener("submit", formSubmitHandler)
 
-// addEventListener to display 5 day forcast
-// load1.addEventListener("submit", loadForcast)
-
-// getCityData("Dallas")
-
-
-
-
 // 6796d6e231f36d13c2f70ab9e10e8126
-
-
-
-// for ( i = 0; i < 6; i++){
-    
-
- 
-
-
 
 // GIVEN a weather dashboard with form inputs
 // WHEN I search for a city
@@ -135,62 +127,3 @@ userFormEl.addEventListener("submit", formSubmitHandler)
 // THEN I am presented with a 5-day forecast that displays the date, an icon representation of weather conditions, the temperature, the wind speed, and the humidity
 // WHEN I click on a city in the search history
 // THEN I am again presented with current and future conditions for that city
-
-
-
-
-
-
-
-
-
-
-
-// // Create 5-day Forcast Display
-// for (let i = 0; i < 6; i++){
-//     let stamp = data.daily[i].dt
-//     const when = new Date(stamp * 1000)
-//     const forcastdate = Intl.DateTimeFormat("en-US").format(when)
-//     let d = document.querySelectorAll(".date").innerHTML = forcastdate
-//     console.log(forcastdate)
-//     let p = document.querySelectorAll(".icon").innerHTML = data.daily[i].weather[0].icon;
-//     console.log(data.daily[i].weather[0].icon)
-//     let t = document.querySelectorAll(".temp").innerHTML = "Temp. " + data.daily[i].temp.day + "&#8457";
-//     console.log(data.daily[i].temp.day)
-//     let w = document.querySelectorAll(".wind").innerHTML = "Wind: " + data.daily[i].wind_speed + "MPH";
-//     console.log(data.daily[i].wind_speed)
-//     let h = document.querySelectorAll(".humidity").innerHTML = "Humidity: " + data.daily[i].humidity + "%";
-//     console.log(data.daily[i].humidity)
-    
-//     // Make an array to save 5-day forcast data in localStorage
-//     var arr = []
-//     arr.push(d, p, t, w, h)
-//     console.log(arr)
-
-//     const saveforcast= function (){
-//         // this is where we are setting the localstorage name to the cityname searched + i
-//         localStorage.setItem(cityName.value + [i], JSON.stringify(arr))
-//     }
-//     loadforcast = function (){
-//         JSON.parse(localStorage.getItem(cityName.value + [i]));
-//     }
-
-//     console.log(forcast)
-    
-//     saveforcast()   
-// }
-
-
-
-
-// // console.log(data)
-
-
-
-
-
-
-
-    // // our data should hopefully be an array of objects
-    // console.log('our new render function called!')
-    // console.log(data.daily)
