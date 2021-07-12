@@ -1,0 +1,48 @@
+* {
+  box-sizing: border-box;
+  padding: 10px;
+}
+/* Float five columns side by side */
+.column {
+   float: left;
+   width: 12%;
+   padding: 0 10px;
+ }
+.h2.content-title{
+  font-size: 50px;
+  font-weight: bolder;
+}
+ .card, .list-group, .list-group-item{
+   background-color: honeydew;
+ }
+
+ .btn-past-searches{
+   width: 100%;
+   margin: 4px;
+ }
+ 
+ #submit.btn{
+   background-color: greenyellow;
+   font-weight: bolder;
+   opacity: 0.6;
+   transition: 0.3s;
+ }
+
+#submit.btn:hover{
+  opacity: 1
+}
+
+
+ #display.current{
+   font-size: 20px;
+
+ }
+ 
+ 
+ header{
+  border-bottom: 3px solid greenyellow;
+  width: 50%;
+  text-align: center;
+  margin: 0 auto 35px auto;
+  width: 50%;
+}

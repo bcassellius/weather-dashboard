@@ -18,7 +18,6 @@ var formSubmitHandler = function(event) {
     }
 }
 
-
 function getCityData(city){
     // get the data for the city's name
     fetch(`https://api.openweathermap.org/data/2.5/weather?q=${city}&units=imperial&appid=6796d6e231f36d13c2f70ab9e10e8126`)
@@ -54,6 +53,7 @@ function getCityData(city){
             document.querySelector("#inputWind").innerHTML = "Wind Speed: " + data.current.wind_speed + "MPH";
             document.querySelector("#inputHumidity").innerHTML = "Humidity: " + data.current.humidity + "%";
             document.querySelector("#inputUvi").innerHTML = "UV Index: " + data.current.uvi;
+
             
             // retrieve the list of cities from storage, add to it, save/overwrite with the new list of cities
             save(city)
@@ -115,7 +115,7 @@ function renderSingleForecast(singleDayOfData) {
         <div>
             <ul class="list-group list-group-flush">
                 <h5 class="list-group-item date">${forcastdate}</h5>
-                <img class="weather-icon" src="http://openweathermap.org/img/wn/${look}@2x.png" alt="">
+                <img class="list-group-item weather-icon" src="http://openweathermap.org/img/wn/${look}@2x.png" alt="">
                 <li class="list-group-item temp">Temp: ${temp}&#8457</li>
                 <li class="list-group-item wind">Wind: ${wind} MPH</li>
                 <li class="list-group-item humidity">Humidity: ${humidity}%</li>
