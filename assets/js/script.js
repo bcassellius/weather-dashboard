@@ -2,8 +2,6 @@ const submit = document.getElementById("submit")
 const userFormEl = document.querySelector("#user-form")
 const cityName = document.querySelector("#cityName")
 var search = []
-console.log(userFormEl)
-console.log(cityName)
 
 // search button clicked
 var formSubmitHandler = function(event) {
@@ -12,7 +10,7 @@ var formSubmitHandler = function(event) {
     var name = cityName.value.trim();
     if (name) {
         getCityData(name);
-        name.value = "";
+        name.value = '';
     } else {
         alert("Please enter the name of a city.")
     }
@@ -41,19 +39,31 @@ function getCityData(city){
             takesOneCallAndRenders5Day(data)
             
             // Create a new JavaScript Date object based on the timestamp
-            let unix_timestamp = data.current.dt
+            let unix_timestamp = data.current.dt;
             var date = new Date(unix_timestamp * 1000);
-            console.log(date)
-            var currentDate = Intl.DateTimeFormat("en-US").format(date)
-            console.log(Intl.DateTimeFormat("en-US").format(date))
+            console.log(date);
+            var currentDate = Intl.DateTimeFormat("en-US").format(date);
+            console.log(Intl.DateTimeFormat("en-US").format(date));
+
+            let currentUVI = Math.round(data.current.uvi);
             
+            if (currentUVI <=2){
+                document.querySelector("#inputUvi").classList.remove("moderate", "high")
+                document.querySelector("#inputUvi").classList.add("low")
+            }else if (currentUVI >=3 && currentUVI <=5 ){
+                document.querySelector("#inputUvi").classList.remove("low", "high")
+                document.querySelector("#inputUvi").classList.add("moderate")
+            }else{
+                document.querySelector("#inputUvi").classList.remove("moderate", "low")
+                document.querySelector("#inputUvi").classList.add("high")
+            };
+
             // Create Current Weather Display
             document.querySelector("#inputCity").innerHTML = "" + city + " ( " + currentDate +" ) ";
             document.querySelector("#inputTemp").innerHTML = "Temperature: " + data.current.temp + "&#8457";
             document.querySelector("#inputWind").innerHTML = "Wind Speed: " + data.current.wind_speed + "MPH";
             document.querySelector("#inputHumidity").innerHTML = "Humidity: " + data.current.humidity + "%";
-            document.querySelector("#inputUvi").innerHTML = "UV Index: " + data.current.uvi;
-
+            document.querySelector("#inputUvi").innerHTML = "UV Index: " + data.current.uvi ;
             
             // retrieve the list of cities from storage, add to it, save/overwrite with the new list of cities
             save(city)
@@ -62,6 +72,7 @@ function getCityData(city){
         })
     })
 }
+
 
 // save search to localStorage
 function save(city){
@@ -135,18 +146,3 @@ $(document).on('click', '.btn-past-searches', function(e) {
     console.log(cityToSearch);
     getCityData(cityToSearch)
 })
-
-
-// 6796d6e231f36d13c2f70ab9e10e8126
-
-// GIVEN a weather dashboard with form inputs
-// WHEN I search for a city
-// THEN I am presented with current and future conditions for that city and that city is added to the search history
-// WHEN I view current weather conditions for that city
-// THEN I am presented with the city name, the date, an icon representation of weather conditions, the temperature, the humidity, the wind speed, and the UV index
-// WHEN I view the UV index
-// THEN I am presented with a color that indicates whether the conditions are favorable, moderate, or severe
-// WHEN I view future weather conditions for that city
-// THEN I am presented with a 5-day forecast that displays the date, an icon representation of weather conditions, the temperature, the wind speed, and the humidity
-// WHEN I click on a city in the search history
-// THEN I am again presented with current and future conditions for that city

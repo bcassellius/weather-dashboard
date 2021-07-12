@@ -33,16 +33,26 @@
 }
 
 
- #display.current{
+#display.current{
    font-size: 20px;
-
  }
  
  
  header{
-  border-bottom: 3px solid greenyellow;
+  border-bottom: 3px solid rgb(168, 231, 168);
   width: 50%;
   text-align: center;
   margin: 0 auto 35px auto;
   width: 50%;
+}
+
+.low{
+  background-color: green;
+}
+.moderate{
+  background-color: yellow;
+  color: black;
+}
+.high{
+  background-color: red;
 }
