@@ -4,7 +4,7 @@
 
 ## Description
 This is a weather website that will allow the user to search for destination weather and see multiple city's weather when planning for a trip.
-Once a city is entered and the search button is clicked, the current weather and 5-day forcast for that city will be displayed.<br>
+Once a city is entered and the search button is clicked, the current weather and 5-day forecast for that city will be displayed.<br>
 ![image](https://user-images.githubusercontent.com/83994997/125226843-7113e380-e297-11eb-939d-9baf7e43a4ea.png)
 
 
